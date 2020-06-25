@@ -1,6 +1,6 @@
 /*These are the functions needed to communicate via 
  * the UART on windows 
- * Data modified : 24/06/2020 
+ * Data modified : 25/06/2020 
  * Author: Olasoji Makiwna 
  */
 
@@ -55,7 +55,7 @@ WINAPI int set_timeouts(){
     	return 0; 
 }
 
-//Write N-Bits via the UART 
+/*Write N-Bits via the UART */
 WINAPI int write_port(char * data){
 	unsigned long num_bytes = sizeof(data);
 	unsigned long num_bytes_sent;
@@ -68,31 +68,16 @@ DWORD event;
 int status;
 char serial_buffer[255];
 char rx;
-DWORD num_bytes; 
 int i = 0; 
-WINAPI char * read_port(){
+/*Load buffer with data and return how many characters 
+ * were sent */
+WINAPI int read_port(char * buffer,size_t size){
 		
-	status = WaitCommEvent(hComm, &event, NULL);
-	if (status == 1){
-	    i=0;
-		do{
-			ReadFile(hComm,
-				 &rx, 
-				 sizeof(rx), 
-				 &num_bytes, 
-				 NULL);
-			serial_buffer[i] = rx; 
-			i++;
-		}while(num_bytes >0);
-		printf("\n");
-		serial_buffer[i] = '\0';
-		return serial_buffer; 
-	}else{
-		return NULL; 
-	}
-
+	DWORD num_bytes;	
+	ReadFile(hComm, buffer, size, &num_bytes, NULL);
+	return num_bytes;
 }
-
+/*Close the com port */
 WINAPI int close_port(){
 	return CloseHandle(hComm);
 }

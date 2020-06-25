@@ -6,7 +6,6 @@ dir_path = os.path.dirname(os.path.abspath(__file__))
 so_name = "libserial.so"
 so_path = os.path.dirname(dir_path) + os.path.sep + "lib" + os.path.sep + so_name  
 serial = ctypes.CDLL(so_path)
-serial.read_port.restype = ctypes.POINTER(ctypes.c_char)
 
 #Open the COM port 
 def open_port(COM):
@@ -39,8 +38,12 @@ def write(data):
     serial.write_port(c_data_str)
 
 #Read from the serial port 
-def read():
-    status = serial.read_port()
-    return status 
-    
+#..This function returns the string and the amount of bytes
+s = ctypes.create_string_buffer(32)
+def read(size=32):
+    num = serial.read_port(s,size)
+    return s,num;
+   
+def close():
+    serial.close_port()
 
