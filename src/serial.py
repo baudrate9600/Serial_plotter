@@ -17,11 +17,10 @@ def open_port(COM):
     c_com_str = com_str.encode()
     #Open the port  
     status = serial.open_port(c_com_str)
-    if status == -1:
-        print("Couldn't open " + COM + "!\n") 
+    if status == -1: 
         return -1 
     else:
-        print("Succesfully opened " + COM) 
+        return 0
     
 #Configure the UART settings 
 def conf_port(baudrate=9600,byte_size = 8, stop_bit = 0, parity_bit = 0):
